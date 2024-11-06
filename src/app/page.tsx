@@ -27,7 +27,7 @@ export default async function Home() {
         </header>
 
         <main className="w-full h-full flex flex-col gap-8 row-start-2 items-center sm:items-start max-w-3xl">
-          <UrlProvider initialData={urls}>
+          <UrlProvider key={user?.id} initialData={urls}>
             <section className="w-full">
               <UrlForm />
             </section>

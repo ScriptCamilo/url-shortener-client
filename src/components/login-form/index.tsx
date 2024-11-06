@@ -97,7 +97,7 @@ export function LoginForm() {
                   </div>
 
                   <FormControl>
-                    <Input type="text" id="name" {...field} />
+                    <Input type="password" id="name" {...field} />
                   </FormControl>
                 </FormItem>
               )}
