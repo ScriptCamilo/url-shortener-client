@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useUrlContext } from '@/context/url.provider';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   longUrl: z.string().url(),
@@ -24,13 +25,28 @@ const formSchema = z.object({
 
 export function UrlForm() {
   const urlContext = useUrlContext();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const url = await createUrl(values);
-    urlContext?.setUrls((prevUrls) => [url, ...prevUrls]);
+    const response = await createUrl(values);
+
+    if (!response?.error) {
+      urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
+
+      return toast({ title: 'Url created successfully!' });
+    }
+
+    const title = 'Uh oh! Something went wrong';
+    const description = response?.message || 'There was a problem with your request.';
+
+    toast({
+      title,
+      description,
+      variant: 'destructive',
+    });
   };
 
   return (

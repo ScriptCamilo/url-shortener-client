@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -13,5 +13,5 @@ export function InputWithLabel(props: InputProps) {
       <Label htmlFor={label.toLowerCase()}>{label}</Label>
       <Input type={type} id={label.toLowerCase()} {...rest} />
     </div>
-  )
+  );
 }

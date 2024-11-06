@@ -1,4 +1,4 @@
-import { EllipsisVertical, SquareArrowOutUpRight } from 'lucide-react';
+import { SquareArrowOutUpRight } from 'lucide-react';
 
 interface ProductProps {
   id: string;
@@ -8,7 +8,7 @@ interface ProductProps {
 }
 
 export function Url(props: ProductProps) {
-  const { id, shortUrl, clicks } = props;
+  const { id, longUrl, shortUrl, clicks } = props;
   const isPlural = clicks > 1;
   const clicksText = isPlural ? 'clicks' : 'click';
 
@@ -24,11 +24,11 @@ export function Url(props: ProductProps) {
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="bg-secondary p-2 rounded-full">
+        <a href={longUrl} target="_blank" rel="noopener noreferrer">
           <SquareArrowOutUpRight className="text-primary" />
-        </span>
+        </a>
 
-        <EllipsisVertical className="text-primary" />
+        {/* <EllipsisVertical className="text-primary" /> */}
       </div>
     </div>
   );

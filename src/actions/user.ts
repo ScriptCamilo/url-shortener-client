@@ -21,10 +21,17 @@ export async function register(data: RegisterBodyDto) {
     body: JSON.stringify(data),
   });
 
-  if (response.ok) {
-    const { access_token: accessToken, ...user } = await response.json();
-    cookies().set('access_token', accessToken);
-    return user;
+  try {
+    if (response.ok) {
+      const { access_token: accessToken, ...user } = await response.json();
+      cookies().set('access_token', accessToken);
+      return user;
+    }
+
+    const handledError = await response.json();
+    return handledError;
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -48,6 +55,9 @@ export async function getUser() {
       const user = await response.json();
       return user;
     }
+
+    const handledError = await response.json();
+    return handledError;
   } catch (error) {
     console.error(error);
   }

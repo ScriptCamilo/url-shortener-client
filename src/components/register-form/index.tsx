@@ -4,10 +4,27 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { register } from '@/actions/user';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useAuthContext } from '@/context/auth.provider';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(2).max(25),
@@ -16,21 +33,42 @@ const formSchema = z.object({
 });
 
 export function RegisterForm() {
+  const { toast } = useToast();
+  const authContext = useAuthContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({ values });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const response = await register(values);
+
+    if (!response?.error) {
+      const title = 'Login successfully';
+
+      toast({ title });
+
+      return authContext?.setOpenLogin(false);
+    }
+
+    const title = 'Uh oh! Something went wrong';
+    const description = response?.message || 'There was a problem with your request.';
+
+    toast({
+      title,
+      description,
+      variant: 'destructive',
+    });
   };
 
   return (
-    <Form { ...form }>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
             <CardTitle>Register</CardTitle>
-            <CardDescription>Create a new account here. Click save when you're done.</CardDescription>
+            <CardDescription>
+              Create a new account here. Click save when you&apos;re done.
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-2">
@@ -45,11 +83,7 @@ export function RegisterForm() {
                   </div>
 
                   <FormControl>
-                    <Input
-                      type="text"
-                      id="name"
-                      {...field}
-                    />
+                    <Input type="text" id="name" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -66,11 +100,7 @@ export function RegisterForm() {
                   </div>
 
                   <FormControl>
-                    <Input
-                      type="text"
-                      id="email"
-                      {...field}
-                    />
+                    <Input type="text" id="email" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -87,11 +117,7 @@ export function RegisterForm() {
                   </div>
 
                   <FormControl>
-                    <Input
-                      type="text"
-                      id="name"
-                      {...field}
-                    />
+                    <Input type="text" id="name" {...field} />
                   </FormControl>
                 </FormItem>
               )}

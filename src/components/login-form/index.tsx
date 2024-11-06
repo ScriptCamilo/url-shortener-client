@@ -39,28 +39,24 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const data = await login(values);
+    const response = await login(values);
 
-    if (data?.ok) {
+    if (!response?.error) {
       const title = 'Login successfully';
 
       toast({ title });
 
-      authContext?.setOpenLogin(false);
-
-      // return window.location.reload();
+      return authContext?.setOpenLogin(false);
     }
 
-    if (data?.error) {
-      const title = 'Uh oh! Something went wrong';
-      const description = data?.message || 'There was a problem with your request.';
+    const title = 'Uh oh! Something went wrong';
+    const description = response?.message || 'There was a problem with your request.';
 
-      toast({
-        title,
-        description,
-        variant: 'destructive',
-      });
-    }
+    toast({
+      title,
+      description,
+      variant: 'destructive',
+    });
   };
 
   return (
