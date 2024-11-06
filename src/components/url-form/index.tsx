@@ -36,6 +36,7 @@ export function UrlForm() {
     if (!response?.error) {
       urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
 
+      form.reset();
       return toast({ title: 'Url created successfully!' });
     }
 
