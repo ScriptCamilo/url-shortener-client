@@ -1,4 +1,4 @@
-import { Cloud, Github, LifeBuoy, User } from 'lucide-react';
+import { Cloud, Github, LifeBuoy, User as UserIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,15 +12,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { envConfig } from '@/configs/env-config';
+import { UserEntity } from '@/types/user-entity';
+
 import { AuthDropdownItem } from '../auth-dropdown-item';
 import { ForwardDropdownItem } from '../forward-dropdown-item';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 
-interface ProfileMenuProps {
+type ProfileMenuProps = {
   user: UserEntity | null;
-}
+};
 
 export function ProfileMenu({ user }: ProfileMenuProps) {
+  const githubUrl = 'https://github.com/ScriptCamilo/url-shortener-client';
   const [firstName, secondName] = user ? user.name.split(' ') : [];
   const firstNameLetter = firstName ? firstName[0].toUpperCase() : null;
   let secondNameLetter = secondName ? secondName[0].toUpperCase() : null;
@@ -49,7 +52,7 @@ export function ProfileMenu({ user }: ProfileMenuProps) {
 
         <DropdownMenuGroup>
           <DropdownMenuItem disabled>
-            <User />
+            <UserIcon />
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
@@ -57,7 +60,7 @@ export function ProfileMenu({ user }: ProfileMenuProps) {
 
         <DropdownMenuSeparator />
 
-        <ForwardDropdownItem url="https://github.com/ScriptCamilo/url-shortener">
+        <ForwardDropdownItem url={githubUrl}>
           <Github />
           <span>GitHub</span>
         </ForwardDropdownItem>
@@ -66,11 +69,6 @@ export function ProfileMenu({ user }: ProfileMenuProps) {
           <LifeBuoy />
           <span>Support</span>
         </DropdownMenuItem>
-
-        <ForwardDropdownItem url={`${envConfig.backendUrl}api`}>
-          <Cloud />
-          <span>API</span>
-        </ForwardDropdownItem>
 
         <DropdownMenuSeparator />
 

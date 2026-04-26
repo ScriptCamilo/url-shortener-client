@@ -42,22 +42,22 @@ export function RegisterForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await register(values);
 
-    if (!response?.error) {
-      const title = 'Login successfully';
+    if (response.error) {
+      const title = 'Uh oh! Something went wrong';
+      const description = response?.message || 'There was a problem with your request.';
 
-      toast({ title });
-
-      return authContext?.setOpenLogin(false);
+      return toast({
+        title,
+        description,
+        variant: 'destructive',
+      });
     }
 
-    const title = 'Uh oh! Something went wrong';
-    const description = response?.message || 'There was a problem with your request.';
+    const title = 'Login successfully';
 
-    toast({
-      title,
-      description,
-      variant: 'destructive',
-    });
+    toast({ title });
+
+    return authContext?.setOpenLogin(false);
   };
 
   return (

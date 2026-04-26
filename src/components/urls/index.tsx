@@ -1,14 +1,19 @@
-'use client';
+import { getUrls } from '@/actions/urls';
+import { Suspense } from 'react';
 
-import { useUrlContext } from '@/context/url.provider';
 import { Url } from '../url';
+import { UrlsSkeleton } from "../url-skeleton"
 
-export function Urls() {
-  const data = useUrlContext();
+export async function Urls() {
+  const urls = await getUrls();
+
+  if ('error' in urls) return null;
 
   return (
     <div className="flex flex-col gap-4">
-      {data?.urls.map((url) => <Url key={url.id} {...url} />)}
+      {urls?.map((url) => (
+        <Url key={url.id} {...url} />
+      ))}
     </div>
   );
 }

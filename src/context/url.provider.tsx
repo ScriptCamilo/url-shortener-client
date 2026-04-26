@@ -1,15 +1,18 @@
 'use client';
 
+import { Tables } from '@/types/database.types';
 import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
+
+type Url = Tables<'urls'>;
 
 interface UrlProviderProps {
   children: React.ReactNode;
-  initialData: UrlEntity[];
+  initialData: Url[];
 }
 
 interface UrlContextValue {
-  urls: UrlEntity[];
-  setUrls: Dispatch<SetStateAction<UrlEntity[]>>;
+  urls: Url[];
+  setUrls: Dispatch<SetStateAction<Url[]>>;
 }
 
 export const UrlContext = createContext<UrlContextValue | undefined>(undefined);

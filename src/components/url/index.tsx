@@ -1,14 +1,10 @@
+import { Tables } from '@/types/database.types';
 import { SquareArrowOutUpRight } from 'lucide-react';
 
-interface ProductProps {
-  id: string;
-  longUrl: string;
-  shortUrl: string;
-  clicks: number;
-}
+type Url = Tables<'urls'>;
 
-export function Url(props: ProductProps) {
-  const { id, longUrl, shortUrl, clicks } = props;
+export function Url(props: Url) {
+  const { long_url: longUrl, short_code: shortCode, clicks } = props;
   const isPlural = clicks > 1;
   const clicksText = isPlural ? 'clicks' : 'click';
 
@@ -16,7 +12,7 @@ export function Url(props: ProductProps) {
     <div className="flex rounded-lg border p-4 border-border justify-between">
       <div className="flex gap-4 flex-grow items-center">
         <div className="">
-          <p className="text-sm font-bold">{shortUrl}</p>
+          <p className="text-sm font-bold">{shortCode}</p>
           <small>
             {clicks} {clicksText}
           </small>

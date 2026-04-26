@@ -1,15 +1,16 @@
-import { getUrls } from '@/actions/urls';
+import { Suspense } from 'react';
+import { loginAnonymous } from '@/actions/auth';
 import { getUser } from '@/actions/user';
 import { ProfileMenu } from '@/components/account-menu';
 import { LoginDialog } from '@/components/login-dialog';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { UrlForm } from '@/components/url-form';
+import { UrlsSkeleton } from '@/components/url-skeleton';
 import { Urls } from '@/components/urls';
 import { AuthProvider } from '@/context/auth.provider';
 import { UrlProvider } from '@/context/url.provider';
 
 export default async function Home() {
-  const urls = await getUrls();
   const user = await getUser();
 
   return (
@@ -27,13 +28,15 @@ export default async function Home() {
         </header>
 
         <main className="w-full h-full flex flex-col gap-8 row-start-2 items-center sm:items-start max-w-3xl">
-          <UrlProvider key={user?.id} initialData={urls}>
+          <UrlProvider key={user?.id} initialData={[]}>
             <section className="w-full">
               <UrlForm />
             </section>
 
             <section className="w-full">
-              <Urls />
+              <Suspense fallback={<UrlsSkeleton />}>
+                <Urls />
+              </Suspense>
             </section>
           </UrlProvider>
         </main>

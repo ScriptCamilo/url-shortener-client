@@ -1,9 +1,11 @@
+import '@/styles/globals.css';
+
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import localFont from 'next/font/local';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import './globals.css';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -21,18 +23,24 @@ export const metadata: Metadata = {
   description: 'Create short urls here',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get('theme')?.value;
+  const theme = themeCookie === 'dark' ? 'dark' : 'light';
+  const htmlClassName = theme === 'dark' ? 'dark' : undefined;
+  const htmlStyle = { colorScheme: theme };
+
   return (
-    <html lang="en">
+    <html lang="en" className={htmlClassName} style={htmlStyle}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme={theme}
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}

@@ -33,21 +33,21 @@ export function UrlForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await createUrl(values);
 
-    if (!response?.error) {
-      urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
+    if ('error' in response) {
+      const title = 'Uh oh! Something went wrong';
+      const description = response.error || 'There was a error while creating the URL.';
 
-      form.reset();
-      return toast({ title: 'Url created successfully!' });
+      return toast({
+        title,
+        description,
+        variant: 'destructive',
+      });
     }
 
-    const title = 'Uh oh! Something went wrong';
-    const description = response?.message || 'There was a problem with your request.';
+    urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
 
-    toast({
-      title,
-      description,
-      variant: 'destructive',
-    });
+    form.reset();
+    return toast({ title: 'Url created successfully!' });
   };
 
   return (
