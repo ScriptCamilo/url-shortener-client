@@ -25,8 +25,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  auth,
 }: Readonly<{
   children: React.ReactNode;
+  auth: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
   const themeCookie = cookieStore.get('theme')?.value;
@@ -44,6 +46,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          {auth}
           <Toaster />
         </ThemeProvider>
       </body>

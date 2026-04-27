@@ -1,4 +1,4 @@
-import { Cloud, Github, LifeBuoy, User as UserIcon } from 'lucide-react';
+import { Github, LifeBuoy, User as UserIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,20 +11,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { envConfig } from '@/configs/env-config';
-import { UserEntity } from '@/types/user-entity';
 
-import { AuthDropdownItem } from '../auth-dropdown-item';
-import { ForwardDropdownItem } from '../forward-dropdown-item';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { AuthDropdownItem } from '@/components/auth-dropdown-item';
+import { ForwardDropdownItem } from '@/components/forward-dropdown-item';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { getProfile } from '@/actions/profile';
 
-type ProfileMenuProps = {
-  user: UserEntity | null;
-};
-
-export function ProfileMenu({ user }: ProfileMenuProps) {
+export async function ProfileMenu() {
+  const user = await getProfile();
   const githubUrl = 'https://github.com/ScriptCamilo/url-shortener-client';
-  const [firstName, secondName] = user ? user.name.split(' ') : [];
+  const [firstName, secondName] = user?.name ? user.name.split(' ') : [];
   const firstNameLetter = firstName ? firstName[0].toUpperCase() : null;
   let secondNameLetter = secondName ? secondName[0].toUpperCase() : null;
 

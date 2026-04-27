@@ -1,45 +1,28 @@
-'use client';
-
 import { LogIn, LogOut } from 'lucide-react';
+import Link from 'next/link';
 
-import { logout } from '@/actions/auth';
-import { useAuthContext } from '@/context/auth.provider';
-import type { UserEntity } from '@/types/user-entity';
-
-import { DropdownMenuItem } from '../ui/dropdown-menu';
+import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Tables } from '@/types/database.types';
 
 type AuthDropdownItemProps = {
-  user: UserEntity | null;
+  user: Partial<Tables<'profiles'>> | null;
 };
 
-export function AuthDropdownItem({ user }: AuthDropdownItemProps) {
-  const data = useAuthContext();
-
-  const handleAuthentication = async () => {
-    if (!user) {
-      return data?.setOpenLogin(true);
-    }
-
-    const response = await logout();
-
-    if (response.ok) console.log({ response });
-  };
-
+export async function AuthDropdownItem({ user }: AuthDropdownItemProps) {
+  console.log({ user })
   return (
-    <>
-      <DropdownMenuItem onClick={handleAuthentication}>
-        {user ? (
-          <>
-            <LogOut />
-            <span>Log out</span>
-          </>
-        ) : (
-          <>
-            <LogIn />
-            <span>Login</span>
-          </>
-        )}
-      </DropdownMenuItem>
-    </>
+    <DropdownMenuItem asChild>
+      {user ? (
+        <Link href="/logout">
+          <LogOut />
+          <span>Log out</span>
+        </Link>
+      ) : (
+        <Link href="/login">
+          <LogIn />
+          <span>Login</span>
+        </Link>
+      )}
+    </DropdownMenuItem>
   );
 }

@@ -12,7 +12,7 @@ export async function Urls() {
   return (
     <div className="flex flex-col gap-4">
       {urls?.map((url) => (
-        <Url key={url.id} {...url} />
+        <Url key={url.id} data={url} />
       ))}
     </div>
   );

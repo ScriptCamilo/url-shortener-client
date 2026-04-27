@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 import { envConfig } from '@/configs/env-config';
 import { createServerClient } from '@/lib/supabase';
-import { getUser } from './user';
+import { getProfile } from './profile';
 import { revalidatePath } from 'next/cache';
 
 interface CreateShortenerUrlDto {

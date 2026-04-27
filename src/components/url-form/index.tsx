@@ -20,7 +20,7 @@ import { useUrlContext } from '@/context/url.provider';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-  longUrl: z.string().url(),
+  longUrl: z.string().url().toLowerCase().trim(),
 });
 
 export function UrlForm() {
@@ -28,6 +28,9 @@ export function UrlForm() {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      longUrl: '',
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -45,7 +48,6 @@ export function UrlForm() {
     }
 
     urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
-
     form.reset();
     return toast({ title: 'Url created successfully!' });
   };
@@ -60,7 +62,6 @@ export function UrlForm() {
             <FormItem className="w-full">
               <div className="flex gap-2 items-center">
                 <FormLabel>Long URL</FormLabel>
-                <FormMessage />
               </div>
 
               <FormControl>
@@ -71,6 +72,7 @@ export function UrlForm() {
                   placeholder="https://example.com"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -35,7 +35,16 @@ interface LoginBodyDto {
 //   }
 // }
 
-export async function login() {}
+export async function login(payload: LoginBodyDto) {
+  const supabase = await createServerClient();
+  const { data, error } = await supabase.auth.signInWithPassword(payload);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return data.user;
+}
 
 export async function logout() {
   (await cookies()).delete('access_token');

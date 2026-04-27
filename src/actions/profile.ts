@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 
 import { envConfig } from '@/configs/env-config';
 import { createServerClient } from '@/lib/supabase';
+import { Tables } from '@/types/database.types';
 
 interface RegisterBodyDto {
   name: string;
@@ -37,7 +38,7 @@ interface RegisterBodyDto {
 //   }
 // }
 
-// export async function getUser() {
+// export async function getProfile() {
 //   const userUrl = `${envConfig.backendUrl}users/me`;
 //   const accessToken = cookies().get('access_token');
 //   const bearerToken = `Bearer ${accessToken?.value}`;
@@ -65,7 +66,7 @@ interface RegisterBodyDto {
 //   }
 // }
 
-export async function register(payload: RegisterBodyDto) {
+export async function signup(payload: RegisterBodyDto) {
   const supabase = await createServerClient();
 
   const { data, error } = await supabase.auth.signUp({
@@ -79,20 +80,20 @@ export async function register(payload: RegisterBodyDto) {
   });
 
   if (error) {
-    return { error, message: error.message };
+    return { error: error.message };
   }
 
-  return { user: data.user };
+  return data;
 }
 
-export async function getUser() {
+export async function getProfile(): Promise<Partial<Tables<'profiles'>> | null> {
   const supabase = await createServerClient();
 
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (user) {
-    const { data } = await supabase.from('profiles').select('name, id').eq('id', user.id).single();
+  if (user && !user.is_anonymous) {
+    const { data } = await supabase.from('profiles').select('name, id').eq('id', user.sub).single();
     return data;
   }
 
