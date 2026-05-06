@@ -14,7 +14,8 @@
     "db:stop": "pnpx supabase stop",
     "db:reset": "pnpx supabase db reset",
     "db:push": "pnpx supabase db push",
-    "db:status": "pnpx supabase status"
+    "db:status": "pnpx supabase status",
+    "db:diff": "pnpx supabase db diff -f"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

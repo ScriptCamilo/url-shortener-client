@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { login } from '@/actions/auth';
+import { login } from '@/actions';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -37,15 +37,16 @@ export default function LoginDialogForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const { formState: { isSubmitting } } = form;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await login(values);
 
     if ('error' in response) {
-      const title = 'Uh oh! Something went wrong';
+      const title = 'An error occurred during the login process';
       const description = response.error;
 
-      toast({
+      return toast({
         title,
         description,
         variant: 'destructive',
@@ -105,7 +106,7 @@ export default function LoginDialogForm() {
           </CardContent>
 
           <CardFooter className="justify-end">
-            <Button type="submit">Login</Button>
+            <Button disabled={isSubmitting} type="submit">Login</Button>
           </CardFooter>
         </Card>
       </form>

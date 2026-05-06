@@ -4,8 +4,16 @@
 
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     font-family: Arial, Helvetica, sans-serif;
+  }
+
+  body[data-scroll-locked] {
+    width: 100% !important;
   }
 
   @layer base {

@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { signup } from '@/actions/profile';
+import { signup } from '@/actions';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -32,18 +32,20 @@ const formSchema = z.object({
   password: z.string().min(8),
 });
 
-export default function RegisterDialogForm() {
+export default function SignupDialogForm() {
+  const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const { formState: { isSubmitting } } = form;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await signup(values);
-    const router = useRouter();
 
-    if ('error' in response) {
-      const title = 'Uh oh! Something went wrong';
+    if (response && 'error' in response) {
+      const title = 'An error occurred during the signup process';
+
       const description = response.error;
 
       return toast({
@@ -53,10 +55,9 @@ export default function RegisterDialogForm() {
       });
     }
 
-    const title = 'Login successfully';
+    const title = 'Signed up successfully';
 
     toast({ title });
-
     return router.push('/');
   };
 
@@ -125,7 +126,7 @@ export default function RegisterDialogForm() {
           </CardContent>
 
           <CardFooter className="justify-end">
-            <Button type="submit">Save</Button>
+            <Button disabled={isSubmitting} type="submit">Save</Button>
           </CardFooter>
         </Card>
       </form>

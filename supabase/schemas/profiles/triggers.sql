@@ -3,3 +3,9 @@ after insert
 on auth.users
 for each row
 execute function public.handle_new_user();
+
+create trigger on_auth_user_updated
+after update
+on auth.users
+for each row
+execute function public.handle_update_user();

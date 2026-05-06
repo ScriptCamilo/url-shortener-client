@@ -37,8 +37,8 @@ export function UrlForm() {
     const response = await createUrl(values);
 
     if ('error' in response) {
-      const title = 'Uh oh! Something went wrong';
-      const description = response.error || 'There was a error while creating the URL.';
+      const title = 'An error occurred while creating the URL';
+      const description = response.error;
 
       return toast({
         title,
@@ -47,9 +47,8 @@ export function UrlForm() {
       });
     }
 
-    urlContext?.setUrls((prevUrls) => [response, ...prevUrls]);
     form.reset();
-    return toast({ title: 'Url created successfully!' });
+    return toast({ title: 'URL created successfully!' });
   };
 
   return (

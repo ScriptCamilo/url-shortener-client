@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
       if (!open) {
-        router.push('/');
+        router.back();
       }
     }}>
       <DialogContent className="max-w-fit">
@@ -34,7 +35,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           className="w-[400px]"
           onValueChange={(value) => {
             if (value !== path) {
-              router.push(value);
+              router.replace(value);
             }
           }}
         >

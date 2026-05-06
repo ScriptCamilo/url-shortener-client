@@ -5,4 +5,5 @@ export const envConfig = {
   supabaseUrl: env.get('SUPABASE_URL').required().asUrlString(),
   supabaseKey: env.get('SUPABASE_KEY').required().asString(),
   supabasePublishableKey: env.get('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY').required().asString(),
+  githubUrl: env.get('GITHUB_URL').required().asString(),
 };
