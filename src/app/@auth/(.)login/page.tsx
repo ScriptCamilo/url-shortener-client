@@ -36,6 +36,10 @@ export default function LoginDialogForm() {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
   const { formState: { isSubmitting } } = form;
 

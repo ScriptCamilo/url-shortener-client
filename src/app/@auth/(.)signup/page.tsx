@@ -37,6 +37,11 @@ export default function SignupDialogForm() {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
   });
   const { formState: { isSubmitting } } = form;
 
