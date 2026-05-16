@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -16,16 +17,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useUrlContext } from '@/context/url.provider';
 import { useToast } from '@/hooks/use-toast';
+
+import {
+  hasStudyDisclaimerAcknowledged,
+  StudyProjectDisclaimerDialog,
+} from '@/components/url-form/study-project-disclaimer-dialog';
 
 const formSchema = z.object({
   longUrl: z.string().url().toLowerCase().trim(),
 });
 
 export function UrlForm() {
-  const urlContext = useUrlContext();
   const { toast } = useToast();
+  const [studyDisclaimerOpen, setStudyDisclaimerOpen] = useState(false);
+  const pendingSubmitRef = useRef<z.infer<typeof formSchema> | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,7 +39,7 @@ export function UrlForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const runCreateUrl = async (values: z.infer<typeof formSchema>) => {
     const response = await createUrl(values);
 
     if ('error' in response) {
@@ -51,8 +57,42 @@ export function UrlForm() {
     return toast({ title: 'URL created successfully!' });
   };
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (typeof window !== 'undefined' && !hasStudyDisclaimerAcknowledged()) {
+      pendingSubmitRef.current = values;
+      setStudyDisclaimerOpen(true);
+      return;
+    }
+
+    await runCreateUrl(values);
+  };
+
+  const handleStudyDisclaimerClosed = (open: boolean) => {
+    setStudyDisclaimerOpen(open);
+  };
+
+  const dismissStudyDisclaimerWithoutContinue = () => {
+    pendingSubmitRef.current = null;
+  };
+
+  const handleStudyDisclaimerContinue = async () => {
+    const values = pendingSubmitRef.current;
+    pendingSubmitRef.current = null;
+
+    if (values) {
+      await runCreateUrl(values);
+    }
+  };
+
   return (
     <Form {...form}>
+      <StudyProjectDisclaimerDialog
+        open={studyDisclaimerOpen}
+        onOpenChange={handleStudyDisclaimerClosed}
+        onContinue={handleStudyDisclaimerContinue}
+        onDismissWithoutContinue={dismissStudyDisclaimerWithoutContinue}
+      />
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4 w-full">
         <FormField
           control={form.control}

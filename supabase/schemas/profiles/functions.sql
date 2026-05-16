@@ -35,3 +35,16 @@ begin
     return new;
   end;
 $function$;
+
+create function public.purge_old_anonymous_auth_users()
+returns void
+language plpgsql
+security definer
+set search_path to ''
+as $function$
+begin
+    delete from auth.users
+    where is_anonymous = true
+    and created_at < now() - interval '7 days';
+  end;
+$function$;

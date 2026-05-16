@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { signup } from '@/actions';
-import { Button } from '@/components/ui/button';
+import { signup } from "@/actions";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -21,10 +21,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(2).max(25),
@@ -38,9 +38,9 @@ export default function SignupDialogForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
+      name: "",
+      email: "",
+      password: "",
     },
   });
   const { formState: { isSubmitting } } = form;
@@ -48,22 +48,22 @@ export default function SignupDialogForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await signup(values);
 
-    if (response && 'error' in response) {
-      const title = 'An error occurred during the signup process';
+    if (response && "error" in response) {
+      const title = "An error occurred during the signup process";
 
       const description = response.error;
 
       return toast({
         title,
         description,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
 
-    const title = 'Signed up successfully';
+    const title = "Signed up successfully";
 
     toast({ title });
-    return router.push('/');
+    return router.push("/");
   };
 
   return (

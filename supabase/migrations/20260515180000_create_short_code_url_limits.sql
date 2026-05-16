@@ -1,3 +1,5 @@
+set check_function_bodies = off;
+
 create or replace function public.create_short_code(var_long_url text, var_profile_id uuid)
 returns public.urls
 language plpgsql
@@ -73,4 +75,5 @@ begin
     end;
   end loop;
 end;
-$function$;
+$function$
+;

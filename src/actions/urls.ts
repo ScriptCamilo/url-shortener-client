@@ -7,11 +7,6 @@ interface CreateShortenerUrlDto {
   longUrl: string;
 }
 
-// TODO: Limit users to have only 5 urls
-// TODO: Anonymous users should have a limit of 2 urls
-// TODO: Add a cron job to delete anonymous users that are not used for a week
-// TODO: Add a modal explaining to users that this is a study project and the data may be deleted at any time
-export async function createUrl(payload: CreateShortenerUrlDto) {
   const supabase = await createServerClient();
   const { data } = await supabase.auth.getClaims();
   let user = data?.claims;
